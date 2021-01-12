@@ -13,7 +13,8 @@
     $command = "mysqldump -u $dbuser --password=$dbpwd $dbname | gzip > $filename";
     $result = passthru($command);
 
-    $attachmentname = array_pop(explode("/", $filename));
+    $value = explode("/", $filename);
+    $attachmentname = array_pop($value);
 
     $message = "Compressed database backup file $attachmentname attached.";
     $mime_boundary = "<<<:" . md5(time());

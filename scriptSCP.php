@@ -1,27 +1,19 @@
 <?php
     $datestamp = date("Y-m-d");
 
-    $servername = "localhost";
-    $username = "XXX";
-    $password = "XXX";
-    $dbname = "XXX";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $dbuser = "XXXXX";
+    $dbpwd = "XXXXX";
+    $dbname = "XXXXX";
+    $filename= "backup-$datestamp.sql.gz";
+    $to = "root@XX.XX.XX.XX:/home/".$filename;
 
-    if ($conn->connect_error)
-    {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    $restore = "mysqldump -u $dbuser --password=$dbpwd $dbname | gzip > $filename";
+    $result = passthru($restore);
 
-    if (($handle = fopen('data.csv', "r")) !== FALSE)
-    {
-        fgets($handle);
-        while (($data = fgetcsv($handle, 1000, ";")) !== FALSE)
-        {
-            $query = "UPDATE pet_breeds SET name_rastreator = '$data4' WHERE name='$data2'";
-            $conn->query($query);
-        }
-    }
 
-    $conn->close();
+    $command = "scp $filename $to";
+    $result = passthru($command);
+
+    unlink($filename);
 ?>
